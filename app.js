@@ -1,11 +1,3 @@
-// Create Dino Constructor
-const Dino = function(species, fact, height, weight, diet) {
-  this.species = species;
-  this.fact = fact;
-  this.height = parseInt(height);
-  this.weight = weight;
-  this.diet = diet;
-};
 const arr = [];
 // get form elements
 const name = document.getElementById("name");
@@ -14,6 +6,14 @@ const inches = document.getElementById("inches");
 const weight = document.getElementById("weight");
 const diet = document.getElementById("diet");
 let formValid = false;
+// Create Dino Constructor
+const Dino = function(species, fact, height, weight, diet) {
+  this.species = species;
+  this.fact = fact;
+  this.height = parseInt(height);
+  this.weight = weight;
+  this.diet = diet;
+};
 // Create Dino Objects
 const dinoData = d => {
   // loop through data
@@ -82,7 +82,7 @@ const compareHumanHeight = () => {
 
   // get human object
   const human = arrCopy.filter(obj => {
-    return obj.species === "Homo sapien";
+    return obj.species === "Human";
   });
 
   let heightDifference;
@@ -91,12 +91,10 @@ const compareHumanHeight = () => {
     // make comparison between human weight and dino weight
     heightDifference = found[0].height - human[0].height;
     // create string to show results
-    compareHeightResults = `The tallest species the ${found[0].species} is ${heightDifference} inches taller than ${human[0].name}.`;
+    compareHeightResults = `<p>The tallest species the ${found[0].species} is ${heightDifference} inches taller than ${human[0].name}.</p>`;
   } else {
-    // make comparison between human weight and dino weight
-    heightDifference = human[0].height - found[0].height;
     // create string to show results
-    compareHeightResults = `${human[0].name} is ${heightDifference} inches taller than ${found[0].species}.`;
+    compareHeightResults = `<p>invalid human height</p>`;
   }
 
   console.log(compareHeightResults);
@@ -104,9 +102,44 @@ const compareHumanHeight = () => {
   compare.innerHTML = compareHeightResults;
 };
 
-const clickHuman = () => {};
 // Create Dino Compare Method 2
 // NOTE: Weight in JSON file is in lbs, height in inches.
+const compareHumanWeight = () => {
+  const arrCopy = arr;
+  // compare human height to tallest dinosaur height
+  // get tallest from dino and human data
+  var res = Math.max.apply(
+    Math,
+    arrCopy.map(function(o) {
+      return o.weight;
+    })
+  );
+  // find the object that is the tallest
+  var found = arrCopy.filter(obj => {
+    return obj.weight === res;
+  });
+
+  // get human object
+  const human = arrCopy.filter(obj => {
+    return obj.species === "Human";
+  });
+
+  let weightDifference;
+  let compareHeightResults;
+  if (found[0].weight > human[0].weight) {
+    // make comparison between human weight and dino weight
+    weightDifference = found[0].weight - human[0].weight;
+    // create string to show results
+    compareWeightResult = `<p>The heaviest species the ${found[0].species} is ${weightDifference} pounds heavier than ${human[0].name}.</p>`;
+  } else {
+    // create string to show results
+    compareWeightResult = `<p>Invalid human weight</p>`;
+  }
+
+  console.log(compareWeightResult);
+  const compare = document.querySelector(".compare");
+  compare.innerHTML += compareWeightResult;
+};
 
 // Create Dino Compare Method 3
 // NOTE: Weight in JSON file is in lbs, height in inches.
@@ -129,13 +162,13 @@ const createTiles = combinedArr => {
   // loop through dinosaur and human data
   for (var i = 0; i < combinedArr.length; i++) {
     if (combinedArr[i].species === "Human") {
-      // create html for grid
+      // create html for human
       grid.innerHTML += `<div class="grid-item ${combinedArr[i].species}">
  <h3>${combinedArr[i].species}</h3>
  <img src="/images/${combinedArr[i].species}.png"/>
  </div>`;
     } else {
-      // create html for grid
+      // create html for dino
       grid.innerHTML += `<div class="grid-item ${combinedArr[i].species}">
  <h3>${combinedArr[i].species}</h3>
  <img src="/images/${combinedArr[i].species}.png"/>
@@ -188,6 +221,7 @@ const callback = () => {
         // apply the html to DOM with combined dino and human data
         createTiles(arr);
         compareHumanHeight();
+        compareHumanWeight();
       });
   }
 };
