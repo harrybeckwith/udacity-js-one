@@ -125,7 +125,7 @@ const compareHumanWeight = () => {
   });
 
   let weightDifference;
-  let compareHeightResults;
+  let compareWeightResult;
   if (found[0].weight > human[0].weight) {
     // make comparison between human weight and dino weight
     weightDifference = found[0].weight - human[0].weight;
@@ -135,14 +135,42 @@ const compareHumanWeight = () => {
     // create string to show results
     compareWeightResult = `<p>Invalid human weight</p>`;
   }
-
-  console.log(compareWeightResult);
+  // add result to DOM
   const compare = document.querySelector(".compare");
   compare.innerHTML += compareWeightResult;
 };
 
 // Create Dino Compare Method 3
 // NOTE: Weight in JSON file is in lbs, height in inches.
+const compareDiet = () => {
+  const arrCopy = arr;
+  console.log("arrCopy", arrCopy);
+  // get human object
+  const human = arrCopy.filter(obj => {
+    return obj.species === "Human";
+  });
+  console.log("arrCopy", arrCopy);
+  // get human diet
+  const humanDiet = human[0].diet.toLowerCase();
+  // filter all dinosaurs with this diet
+  const dinoDietMatch = arrCopy.filter(obj => {
+    return obj.diet === humanDiet;
+  });
+  // create  a list of matching dinosaurs with the same diet
+  let compareString = "";
+  for (let i = 0; i < dinoDietMatch.length; i++) {
+    compareString += dinoDietMatch[i].species + ", ";
+  }
+  console.log("compareString", compareString);
+  console.log(dinoDietMatch);
+  // add result to DOM
+  const compare = document.querySelector(".compare");
+  if (compareString.length > 0) {
+    compare.innerHTML += `The ${compareString} all have the same diet as ${human[0].name} which is a ${humanDiet} diet.`;
+  } else {
+    compare.innerHTML += `No dinosaur has the ${humanDiet}.`;
+  }
+};
 
 // Generate Tiles for each Dino in Array
 
@@ -164,7 +192,7 @@ const createTiles = combinedArr => {
     if (combinedArr[i].species === "Human") {
       // create html for human
       grid.innerHTML += `<div class="grid-item ${combinedArr[i].species}">
- <h3>${combinedArr[i].species}</h3>
+ <h3>${combinedArr[i].name}</h3>
  <img src="/images/${combinedArr[i].species}.png"/>
  </div>`;
     } else {
@@ -222,6 +250,7 @@ const callback = () => {
         createTiles(arr);
         compareHumanHeight();
         compareHumanWeight();
+        compareDiet();
       });
   }
 };
