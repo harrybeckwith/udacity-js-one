@@ -128,11 +128,20 @@ const createTiles = combinedArr => {
   grid.innerHTML = "";
   // loop through dinosaur and human data
   for (var i = 0; i < combinedArr.length; i++) {
-    // create html for grid
-    grid.innerHTML += `<div class="grid-item ${combinedArr[i].species}">
-    <h3>${combinedArr[i].species}</h3>
-    <img src="/images/${combinedArr[i].species}.png"/>
-    <p>${combinedArr[i].species}</p></div>`;
+    if (combinedArr[i].species === "Human") {
+      // create html for grid
+      grid.innerHTML += `<div class="grid-item ${combinedArr[i].species}">
+ <h3>${combinedArr[i].species}</h3>
+ <img src="/images/${combinedArr[i].species}.png"/>
+ </div>`;
+    } else {
+      // create html for grid
+      grid.innerHTML += `<div class="grid-item ${combinedArr[i].species}">
+ <h3>${combinedArr[i].species}</h3>
+ <img src="/images/${combinedArr[i].species}.png"/>
+ <p>${combinedArr[i].fact}</p>
+ </div>`;
+    }
   }
 };
 
