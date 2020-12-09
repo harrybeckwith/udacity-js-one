@@ -97,7 +97,6 @@ const compareHumanHeight = () => {
     compareHeightResults = `<p>invalid human height</p>`;
   }
 
-  console.log(compareHeightResults);
   const compare = document.querySelector(".compare");
   compare.innerHTML = compareHeightResults;
 };
@@ -144,12 +143,10 @@ const compareHumanWeight = () => {
 // NOTE: Weight in JSON file is in lbs, height in inches.
 const compareDiet = () => {
   const arrCopy = arr;
-  console.log("arrCopy", arrCopy);
   // get human object
   const human = arrCopy.filter(obj => {
     return obj.species === "Human";
   });
-  console.log("arrCopy", arrCopy);
   // get human diet
   const humanDiet = human[0].diet.toLowerCase();
   // filter all dinosaurs with this diet
@@ -161,8 +158,6 @@ const compareDiet = () => {
   for (let i = 0; i < dinoDietMatch.length; i++) {
     compareString += dinoDietMatch[i].species + ", ";
   }
-  console.log("compareString", compareString);
-  console.log(dinoDietMatch);
   // add result to DOM
   const compare = document.querySelector(".compare");
   if (compareString.length > 0) {
@@ -182,8 +177,6 @@ const createTiles = combinedArr => {
   };
   // move human tile to center tile 3*3 tiles
   combinedArr.move(8, 4);
-
-  console.log(combinedArr);
 
   const grid = document.getElementById("grid");
   grid.innerHTML = "";
