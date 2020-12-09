@@ -1,5 +1,8 @@
 # Object Oriented Javascript 
 
+## Udacity reviwer
+Please use a live server extensions to be able to make the request to the json file. Such as https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer for visual studio.
+
 ## Student Instructions
 
 ### Big Picture
