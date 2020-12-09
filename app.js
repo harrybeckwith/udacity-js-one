@@ -7,6 +7,15 @@ const weight = document.getElementById("weight");
 const diet = document.getElementById("diet");
 let formValid = false;
 // Create Dino Constructor
+/**
+ * @description Creates dinosaurs
+ * @constructor
+ * @param {string} species - The species of the dinosaur
+ * @param {string} fact - A fact about the dinosaur
+ * @param {string} height - Height of the dinosaur in inches
+ * @param {string} weight - weight of the dinosaur in pounds
+ * @param {string} diet - diet of the dinosaur
+ */
 const Dino = function(species, fact, height, weight, diet) {
   this.species = species;
   this.fact = fact;
