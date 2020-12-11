@@ -19,15 +19,58 @@ let formValid = false;
  * @param {string} when - diet of the dinosaur
  * @param {string} where - diet of the dinosaur
  */
-const Dino = function(species, fact, height, weight, diet, where, when) {
-  this.species = species;
-  this.fact = fact;
-  this.height = parseInt(height);
-  this.weight = weight;
-  this.diet = diet;
-  this.where = where;
-  this.when = when;
-};
+
+class Dino {
+  constructor(species, fact, height, weight, diet, where, when) {
+    this.species = species;
+    this.fact = fact;
+    this.height = parseInt(height);
+    this.weight = weight;
+    this.diet = diet;
+    this.where = where;
+    this.when = when;
+  }
+  compareDiet(human) {
+    // change diets to lowercase for comparison
+    const humanDiet = human.diet.toLowerCase();
+    const dinoDiet = this.diet.toLowerCase();
+    // check if matching diet
+    if (humanDiet === dinoDiet) {
+      return `${human.name} has the same diet as ${this.species} which is ${humanDiet}`;
+    } else {
+      // check if not a match
+      return `${human.name} diet is ${humanDiet} and ${this.species} diet is ${dinoDiet}`;
+    }
+  }
+  compareHeightOrWeight(compare, human) {
+    // store human and dinosaur objects
+
+    // convert weight to integers
+    const dinoCompare = parseInt(this[compare]);
+    const humanCompare = parseInt(human[compare]);
+
+    // check if dino height or weight is greater than human
+    if (dinoCompare > humanCompare) {
+      // calc  difference
+      const compareDifference = parseInt(dinoCompare - humanCompare);
+      if (compare === "weight") {
+        return `The ${this.species} is ${compareDifference} lbs heavier than ${human.name}`;
+      } else if (compare === "height") {
+        return `The ${this.species} is ${compareDifference} inches taller than ${human.name}`;
+      }
+    } else {
+      // if human is greater than dino
+      // calc  difference
+      const compareDifference = parseInt(humanCompare - dinoCompare);
+      if (compare === "weight") {
+        return `${human.name} is ${compareDifference} lbs heavier than the ${this.species}`;
+      } else if (compare === "height") {
+        return `${human.name} is ${compareDifference} linches taller than the ${this.species}`;
+      }
+    }
+  }
+}
+
 // Create Dino Objects
 const dinoData = d => {
   // loop through data
@@ -116,52 +159,9 @@ const getHuman = () => {
   return human[0];
 };
 
-const compareHeightOrWeight = (obj, compare) => {
-  // store human and dinosaur objects
-  const human = getHuman();
-  const dinosaur = obj;
-  // convert weight to integers
-  const dinoCompare = parseInt(dinosaur[compare]);
-  const humanCompare = parseInt(human[compare]);
-
-  // check if dino height or weight is greater than human
-  if (dinoCompare > humanCompare) {
-    // calc  difference
-    const compareDifference = parseInt(dinoCompare - humanCompare);
-    if (compare === "weight") {
-      return `The ${dinosaur.species} is ${compareDifference} lbs heavier than ${human.name}`;
-    } else if (compare === "height") {
-      return `The ${dinosaur.species} is ${compareDifference} inches taller than ${human.name}`;
-    }
-  } else {
-    // if human is greater than dino
-    // calc  difference
-    const compareDifference = parseInt(humanCompare - dinoCompare);
-    if (compare === "weight") {
-      return `${human.name} is ${compareDifference} lbs heavier than the ${dinosaur.species}`;
-    } else if (compare === "height") {
-      return `${human.name} is ${compareDifference} linches taller than the ${dinosaur.species}`;
-    }
-  }
-};
-
-const compareDiet = obj => {
-  const human = getHuman();
-  const dinosaur = obj;
-
-  // change diets to lowercase for comparison
-  const humanDiet = human.diet.toLowerCase();
-  const dinoDiet = dinosaur.diet.toLowerCase();
-  // check if matching diet
-  if (humanDiet === dinoDiet) {
-    return `${human.name} has the same diet as ${dinosaur.species} which is ${humanDiet}`;
-  } else {
-    // check if not a match
-    return `${human.name} diet is ${humanDiet} and ${dinosaur.species} diet is ${dinoDiet} `;
-  }
-};
-
 const getRandomFact = dinoObj => {
+  const human = getHuman();
+
   let fact = dinoObj.fact;
   // random from 6 three compare methods used
   if (dinoObj.species !== "Pigeon") {
@@ -173,13 +173,13 @@ const getRandomFact = dinoObj => {
         fact = `The ${dinoObj.species} was around during the ${dinoObj.when}`;
         break;
       case 2:
-        fact = `${compareHeightOrWeight(dinoObj, "weight")}`;
+        fact = `${dinoObj.compareHeightOrWeight("weight", human)}`;
         break;
       case 3:
-        fact = `${compareHeightOrWeight(dinoObj, "height")}`;
+        fact = `${dinoObj.compareHeightOrWeight("height", human)}`;
         break;
       case 4:
-        fact = `${compareDiet(dinoObj)}`;
+        fact = `${dinoObj.compareDiet(human)}`;
         break;
       case 5:
         fact = `${dinoObj.fact}`;
