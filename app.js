@@ -78,14 +78,14 @@ const compareHumanHeight = () => {
   const arrCopy = arr;
   // compare human height to tallest dinosaur height
   // get tallest from dino and human data
-  var res = Math.max.apply(
+  const res = Math.max.apply(
     Math,
     arrCopy.map(function(o) {
       return o.height;
     })
   );
   // find the object that is the tallest
-  var found = arrCopy.filter(obj => {
+  const found = arrCopy.filter(obj => {
     return obj.height === res;
   });
 
@@ -116,14 +116,14 @@ const compareHumanWeight = () => {
   const arrCopy = arr;
   // compare human height to tallest dinosaur height
   // get tallest from dino and human data
-  var res = Math.max.apply(
+  const res = Math.max.apply(
     Math,
     arrCopy.map(function(o) {
       return o.weight;
     })
   );
   // find the object that is the tallest
-  var found = arrCopy.filter(obj => {
+  const found = arrCopy.filter(obj => {
     return obj.weight === res;
   });
 
@@ -190,7 +190,7 @@ const createTiles = combinedArr => {
   const grid = document.getElementById("grid");
   grid.innerHTML = "";
   // loop through dinosaur and human data
-  for (var i = 0; i < combinedArr.length; i++) {
+  for (let i = 0; i < combinedArr.length; i++) {
     if (combinedArr[i].species === "Human") {
       // create html for human
       grid.innerHTML += `<div class="grid-item ${combinedArr[i].species}">
