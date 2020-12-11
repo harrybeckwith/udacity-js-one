@@ -162,7 +162,7 @@ const compareDiet = obj => {
 
 const getRandomFact = dinoObj => {
   let fact = dinoObj.fact;
-  if (dinoObj.name !== "Pigeon") {
+  if (dinoObj.species !== "Pigeon") {
     switch (Math.floor(Math.random() * 6)) {
       case 0:
         fact = `The ${dinoObj.species} was found in ${dinoObj.where}`;
