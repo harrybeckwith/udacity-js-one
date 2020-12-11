@@ -5,6 +5,7 @@ const feet = document.getElementById("feet");
 const inches = document.getElementById("inches");
 const weight = document.getElementById("weight");
 const diet = document.getElementById("diet");
+// validation check for incomplete fields
 let formValid = false;
 // Create Dino Constructor
 /**
@@ -52,7 +53,6 @@ const dinoData = d => {
 const createHuman = (function() {
   // create a human object with value from form
   // set species to human for identifying
-
   // turn feet and inches into inches for dino comparison
   return function() {
     const human = {
@@ -69,8 +69,7 @@ const createHuman = (function() {
 
 // validate form
 const validateForm = () => {
-  // validate form
-  // change valid variable true/false
+  // change valid variable true/false if feilds are empty/filled
   if (name.value == "" || feet.value == "" || weight.value == "") {
     formValid = false;
   } else {
@@ -79,7 +78,6 @@ const validateForm = () => {
 };
 
 // Generate Tiles for each Dino in Array
-// Add tiles to DOM
 const createTiles = combinedArr => {
   // move human tile func
   Array.prototype.move = function(from, to) {
@@ -93,13 +91,13 @@ const createTiles = combinedArr => {
   // loop through dinosaur and human data
   for (let i = 0; i < combinedArr.length; i++) {
     if (combinedArr[i].species === "Human") {
-      // create html for human
+      // add html for human to DOM
       grid.innerHTML += `<div class="grid-item ${combinedArr[i].species}">
  <h3>${combinedArr[i].name}</h3>
  <img src="/images/${combinedArr[i].species}.png"/>
  </div>`;
     } else {
-      // create html for dino
+      // add html for dino to DOM
       grid.innerHTML += `<div class="grid-item ${combinedArr[i].species}">
  <h3>${combinedArr[i].species}</h3>
  <img src="/images/${combinedArr[i].species}.png"/>
@@ -110,6 +108,7 @@ const createTiles = combinedArr => {
 };
 
 const getHuman = () => {
+  // get human obj from arr of dinos and human
   const arrCopy = arr;
   const human = arrCopy.filter(obj => {
     return obj.species === "Human";
@@ -223,7 +222,6 @@ const callback = () => {
     fetchJSONData()
       .then(data => {
         // use data to create dino objects
-
         dinoData(data);
       })
       .then(() => {
