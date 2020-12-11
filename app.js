@@ -16,12 +16,14 @@ let formValid = false;
  * @param {string} weight - weight of the dinosaur in pounds
  * @param {string} diet - diet of the dinosaur
  */
-const Dino = function(species, fact, height, weight, diet) {
+const Dino = function(species, fact, height, weight, diet, where, when) {
   this.species = species;
   this.fact = fact;
   this.height = parseInt(height);
   this.weight = weight;
   this.diet = diet;
+  this.where = where;
+  this.when = when;
 };
 // Create Dino Objects
 const dinoData = d => {
@@ -33,7 +35,9 @@ const dinoData = d => {
       d.Dinos[i].fact,
       d.Dinos[i].height,
       d.Dinos[i].weight,
-      d.Dinos[i].diet
+      d.Dinos[i].diet,
+      d.Dinos[i].where,
+      d.Dinos[i].when
     );
     // add to global arr
     arr.push(dinosaur);
@@ -72,112 +76,7 @@ const validateForm = () => {
   }
 };
 
-// Create Dino Compare Method 1
-// NOTE: Weight in JSON file is in lbs, height in inches.
-const compareHumanHeight = () => {
-  const arrCopy = arr;
-  // compare human height to tallest dinosaur height
-  // get tallest from dino and human data
-  const res = Math.max.apply(
-    Math,
-    arrCopy.map(function(o) {
-      return o.height;
-    })
-  );
-  // find the object that is the tallest
-  const found = arrCopy.filter(obj => {
-    return obj.height === res;
-  });
-
-  // get human object
-  const human = arrCopy.filter(obj => {
-    return obj.species === "Human";
-  });
-
-  let heightDifference;
-  let compareHeightResults;
-  if (found[0].height > human[0].height) {
-    // make comparison between human weight and dino weight
-    heightDifference = found[0].height - human[0].height;
-    // create string to show results
-    compareHeightResults = `<p>The tallest species the ${found[0].species} is ${heightDifference} inches taller than ${human[0].name}.</p>`;
-  } else {
-    // create string to show results
-    compareHeightResults = `<p>invalid human height</p>`;
-  }
-
-  const compare = document.querySelector(".compare");
-  compare.innerHTML = compareHeightResults;
-};
-
-// Create Dino Compare Method 2
-// NOTE: Weight in JSON file is in lbs, height in inches.
-const compareHumanWeight = () => {
-  const arrCopy = arr;
-  // compare human height to tallest dinosaur height
-  // get tallest from dino and human data
-  const res = Math.max.apply(
-    Math,
-    arrCopy.map(function(o) {
-      return o.weight;
-    })
-  );
-  // find the object that is the tallest
-  const found = arrCopy.filter(obj => {
-    return obj.weight === res;
-  });
-
-  // get human object
-  const human = arrCopy.filter(obj => {
-    return obj.species === "Human";
-  });
-
-  let weightDifference;
-  let compareWeightResult;
-  if (found[0].weight > human[0].weight) {
-    // make comparison between human weight and dino weight
-    weightDifference = found[0].weight - human[0].weight;
-    // create string to show results
-    compareWeightResult = `<p>The heaviest species the ${found[0].species} is ${weightDifference} pounds heavier than ${human[0].name}.</p>`;
-  } else {
-    // create string to show results
-    compareWeightResult = `<p>Invalid human weight</p>`;
-  }
-  // add result to DOM
-  const compare = document.querySelector(".compare");
-  compare.innerHTML += compareWeightResult;
-};
-
-// Create Dino Compare Method 3
-// NOTE: Weight in JSON file is in lbs, height in inches.
-const compareDiet = () => {
-  const arrCopy = arr;
-  // get human object
-  const human = arrCopy.filter(obj => {
-    return obj.species === "Human";
-  });
-  // get human diet
-  const humanDiet = human[0].diet.toLowerCase();
-  // filter all dinosaurs with this diet
-  const dinoDietMatch = arrCopy.filter(obj => {
-    return obj.diet === humanDiet;
-  });
-  // create  a list of matching dinosaurs with the same diet
-  let compareString = "";
-  for (let i = 0; i < dinoDietMatch.length; i++) {
-    compareString += dinoDietMatch[i].species + ", ";
-  }
-  // add result to DOM
-  const compare = document.querySelector(".compare");
-  if (compareString.length > 0) {
-    compare.innerHTML += `The ${compareString} all have the same diet as ${human[0].name} which is a ${humanDiet} diet.`;
-  } else {
-    compare.innerHTML += `No dinosaur has the ${humanDiet}.`;
-  }
-};
-
 // Generate Tiles for each Dino in Array
-
 // Add tiles to DOM
 const createTiles = combinedArr => {
   // move human tile func
@@ -202,10 +101,90 @@ const createTiles = combinedArr => {
       grid.innerHTML += `<div class="grid-item ${combinedArr[i].species}">
  <h3>${combinedArr[i].species}</h3>
  <img src="/images/${combinedArr[i].species}.png"/>
- <p>${combinedArr[i].fact}</p>
+ <p>${getRandomFact(combinedArr[i])}</p>
  </div>`;
     }
   }
+};
+
+const getHuman = () => {
+  const arrCopy = arr;
+  const human = arrCopy.filter(obj => {
+    return obj.species === "Human";
+  });
+  return human[0];
+};
+
+const compareHeightOrWeight = (obj, compare) => {
+  // store human and dinosaur objects
+  const human = getHuman();
+  const dinosaur = obj;
+  // convert weight to integers
+  const dinoCompare = parseInt(dinosaur[compare]);
+  const humanCompare = parseInt(human[compare]);
+
+  // check if dino height or weight is greater than human
+  if (dinoCompare > humanCompare) {
+    // calc  difference
+    const compareDifference = parseInt(dinoCompare - humanCompare);
+    if (compare === "weight") {
+      return `The ${dinosaur.species} is ${compareDifference} lbs heavier than ${human.name}`;
+    } else if (compare === "height") {
+      return `The ${dinosaur.species} is ${compareDifference} inches taller than ${human.name}`;
+    }
+  } else {
+    // if human is greater than dino
+    // calc  difference
+    const compareDifference = parseInt(humanCompare - dinoCompare);
+    if (compare === "weight") {
+      return `${human.name} is ${compareDifference} lbs heavier than the ${dinosaur.species}`;
+    } else if (compare === "height") {
+      return `${human.name} is ${compareDifference} linches taller than the ${dinosaur.species}`;
+    }
+  }
+};
+
+const compareDiet = obj => {
+  const human = getHuman();
+  const dinosaur = obj;
+
+  // change diets to lowercase for comparison
+  const humanDiet = human.diet.toLowerCase();
+  const dinoDiet = dinosaur.diet.toLowerCase();
+  // check if matching diet
+  if (humanDiet === dinoDiet) {
+    return `${human.name} has the same diet as ${dinosaur.species} which is ${humanDiet}`;
+  } else {
+    // check if not a match
+    return `${human.name} diet is ${humanDiet} and ${dinosaur.species} diet is ${dinoDiet} `;
+  }
+};
+
+const getRandomFact = dinoObj => {
+  let fact = dinoObj.fact;
+  if (dinoObj.name !== "Pigeon") {
+    switch (Math.floor(Math.random() * 6)) {
+      case 0:
+        fact = `The ${dinoObj.species} was found in ${dinoObj.where}`;
+        break;
+      case 1:
+        fact = `The ${dinoObj.species} was around during the ${dinoObj.when}`;
+        break;
+      case 2:
+        fact = `${compareHeightOrWeight(dinoObj, "weight")}`;
+        break;
+      case 3:
+        fact = `${compareHeightOrWeight(dinoObj, "height")}`;
+        break;
+      case 4:
+        fact = `${compareDiet(dinoObj)}`;
+        break;
+      case 5:
+        fact = `${dinoObj.fact}`;
+        break;
+    }
+  }
+  return fact;
 };
 
 // Remove form from screen
@@ -241,6 +220,7 @@ const callback = () => {
     fetchJSONData()
       .then(data => {
         // use data to create dino objects
+
         dinoData(data);
       })
       .then(() => {
@@ -250,9 +230,6 @@ const callback = () => {
       .then(() => {
         // apply the html to DOM with combined dino and human data
         createTiles(arr);
-        compareHumanHeight();
-        compareHumanWeight();
-        compareDiet();
       });
   }
 };
