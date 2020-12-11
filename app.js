@@ -15,6 +15,8 @@ let formValid = false;
  * @param {string} height - Height of the dinosaur in inches
  * @param {string} weight - weight of the dinosaur in pounds
  * @param {string} diet - diet of the dinosaur
+ * @param {string} when - diet of the dinosaur
+ * @param {string} where - diet of the dinosaur
  */
 const Dino = function(species, fact, height, weight, diet, where, when) {
   this.species = species;
@@ -162,6 +164,7 @@ const compareDiet = obj => {
 
 const getRandomFact = dinoObj => {
   let fact = dinoObj.fact;
+  // random from 6 three compare methods used
   if (dinoObj.species !== "Pigeon") {
     switch (Math.floor(Math.random() * 6)) {
       case 0:
